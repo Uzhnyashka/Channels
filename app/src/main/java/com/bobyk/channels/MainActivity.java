@@ -1,5 +1,6 @@
 package com.bobyk.channels;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewParent;
 
+import com.google.gson.Gson;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private ViewPager channelPager;
     private ChannelAdapter channelAdapter;
+    Gson gson;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,12 +35,12 @@ public class MainActivity extends AppCompatActivity{
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("first");
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName("second");
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName("third");
-        //toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         drawerBuilder = new DrawerBuilder()
                 .withActivity(this)
-           //     .withToolbar(toolbar)
+                .withToolbar(toolbar)
                 .addDrawerItems(
                         item1, item2, item3
                 )
@@ -67,5 +70,12 @@ public class MainActivity extends AppCompatActivity{
         }
         channelAdapter.setChannels(channelFragments);
         channelPager.setAdapter(channelAdapter);
+
+        syncData();
+    }
+
+    private void syncData(){
+        Intent i = new Intent(this, LoadService.class);
+        startService(i);
     }
 }
