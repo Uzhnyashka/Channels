@@ -1,6 +1,8 @@
 package com.bobyk.channels;
 
 import android.app.Service;
+import android.content.ContentProvider;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.IBinder;
 
@@ -44,7 +46,11 @@ public class LoadService extends Service {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 System.out.println(response);
-                bla(response);
+                try {
+                    bla(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -67,6 +73,8 @@ public class LoadService extends Service {
             JSONObject jsonChannel = jsonObject.getJSONObject(key);
             ChannelModel channel = new ChannelModel();
             channel.loadFromJson(jsonChannel);
+            saveChannelToDb(channel);
+            System.out.println(channel);
            /* ChannelModel channel = null;
             try {
                 obj = jsonObject.getJSONObject(key);
@@ -81,6 +89,14 @@ public class LoadService extends Service {
             }
             System.out.println(obj);*/
         }
+    }
+
+    private void saveChannelToDb(ChannelModel channel){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ChannelContract.ChannelEntry.COLUMN_ID_NAME, channel.getId());
+        contentValues.put(ChannelContract.ChannelEntry.COLUMN_NAME, channel.getName());
+        contentValues.put(ChannelContract.ChannelEntry.COLUMN_TV_URL, channel.getTvURL());
+        getContentResolver().insert(ChannelContract.ChannelEntry.CONTENT_URI, contentValues);
     }
 
 }
