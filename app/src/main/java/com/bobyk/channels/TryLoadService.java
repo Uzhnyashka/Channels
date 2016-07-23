@@ -1,42 +1,67 @@
 package com.bobyk.channels;
 
-import android.app.Service;
-import android.content.ContentProvider;
+import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.os.IBinder;
+import android.content.Context;
+import android.util.Log;
 
 import com.bobyk.channels.models.ChannelModel;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.SyncHttpClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import cz.msebera.android.httpclient.Header;
 
-public class LoadService extends Service {
+public class TryLoadService extends IntentService {
+
+    private final String TAG = "IntentServiceLogs";
+
 
     public static final String URL_CHANNEL = "https://t2dev.firebaseio.com/CHANNEL.json";
-    public static final String URL_CATEGORY = "https://t2dev.firebaseio.com/CATEGORY.json";
-    public static final String URL_PROGRAM = "https://t2dev.firebaseio.com/PROGRAM.json";
 
-    public LoadService() {
+    private final AsyncHttpClient aClient = new SyncHttpClient();
+
+    public TryLoadService(){
+        super("LService");
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public void onCreate(){
+        super.onCreate();
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        loadChannels();
-        return super.onStartCommand(intent, flags, startId);
+    protected void onHandleIntent(Intent intent){
+        aClient.get(URL_CHANNEL, new RequestParams(), new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                System.out.println(response);
+                try {
+                    getChannelsFromJson(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
     }
 
     public void loadChannels(){

@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void syncData(){
-        Intent i = new Intent(this, LoadService.class);
+        Intent i = new Intent(MainActivity.this, TryLoadService.class);
         startService(i);
     }
 }
