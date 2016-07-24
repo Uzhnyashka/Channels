@@ -148,6 +148,7 @@ public class ChannelProvider extends ContentProvider {
                 else {
                     throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
                 }
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

@@ -30,7 +30,7 @@ public class ChannelFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channel, container, false);
-        tvTitle = (TextView) view.findViewById(R.id.tvChannelTitle);
+        tvTitle = (TextView) view.findViewById(R.id.swipeChannelContainer);
         tvTitle.setText(title);
         return view;
     }

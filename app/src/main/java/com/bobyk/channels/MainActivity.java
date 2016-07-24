@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch (position){
                             case 1:
+                                loadChannelsFragment();
                                 return false;
                             case 2:
                                 loadCategoriesFragment();
@@ -108,6 +109,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void loadCategoriesFragment(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment, CategoriesFragment.newInstance());
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    private void loadChannelsFragment(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, ChannelsFragment.newInstance(""));
         ft.addToBackStack(null);
         ft.commit();
     }
