@@ -23,7 +23,7 @@ import com.bobyk.channels.R;
  */
 public class ChannelsFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    private static String category;
+    private static String category = null;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ChannelAdapter channelAdapter;
     private ChannelDBHelper channelDbHelper;
@@ -39,7 +39,7 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channel, null);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeChannelContainer);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeChannelContainer  );
         return view;
     }
 
@@ -55,7 +55,8 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id){
             case MainActivity.ID_CHANNELS:
-                return new CursorLoader(getActivity(), ChannelContract.ChannelEntry.CONTENT_URI, null, null, null, null);
+                if (category.equals("")) return new CursorLoader(getActivity(), ChannelContract.ChannelEntry.CONTENT_URI, null, null, null, null);
+                else return new CursorLoader(getActivity(), ChannelContract.ChannelEntry.CONTENT_URI, null, ChannelContract.ChannelEntry.COLUMN_CATEGORY + " = ?", new String[]{category}, null);
             default:
                 return null;
         }
