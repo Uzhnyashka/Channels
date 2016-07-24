@@ -1,4 +1,4 @@
-package com.bobyk.channels;
+package com.bobyk.channels.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.bobyk.channels.R;
 
 /**
  * Created by bobyk on 22/07/16.

@@ -3,6 +3,8 @@ package com.bobyk.channels;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
+import com.bobyk.channels.fragments.ChannelFragment;
 
 import java.util.ArrayList;
 
@@ -49,4 +51,8 @@ public class ChannelAdapter extends FragmentPagerAdapter {
         return "Page " + position;
     }
 
+    @Override
+    public Object instantiateItem(View container, int position) {
+        return super.instantiateItem(container, position);
+    }
 }

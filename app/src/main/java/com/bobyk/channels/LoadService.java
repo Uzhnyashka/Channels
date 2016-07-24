@@ -57,16 +57,6 @@ public class LoadService extends IntentService {
                     e.printStackTrace();
                 }
             }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-            }
         });
     }
 
@@ -85,7 +75,17 @@ public class LoadService extends IntentService {
             System.out.println(channel);
         }
 
-        
+        saveCategoriesToDb(categories);
+    }
+
+    private void saveCategoriesToDb(Set<String> categories){
+        Iterator<String> it = categories.iterator();
+        while (it.hasNext()){
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ChannelContract.CategoryEntry.COLUMN_CATEGORY, it.next());
+            System.out.println(contentValues.get(ChannelContract.CategoryEntry.COLUMN_CATEGORY));
+            getContentResolver().insert(ChannelContract.CategoryEntry.CONTENT_URI, contentValues);
+        }
     }
 
     private String getCategory(JSONObject jsonObject){

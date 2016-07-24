@@ -45,7 +45,7 @@ public class ChannelContract {
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" +
                 CONTENT_URI + "/" + PATH_CATEGORY;
 
-        public static final String TABLE_NAME = "channelTable";
+        public static final String TABLE_NAME = "categoryTable";
         public static final String COLUMN_CATEGORY = "category";
 
         public static Uri buildCategoryUri(long id){

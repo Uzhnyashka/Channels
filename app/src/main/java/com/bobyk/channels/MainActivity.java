@@ -1,31 +1,42 @@
 package com.bobyk.channels;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.google.gson.Gson;
+import com.bobyk.channels.fragments.ScheduleFragment;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+
+import com.bobyk.channels.fragments.*;
 
 import java.util.ArrayList;
 
 /**
  * Created by bobyk on 22/07/16.
  */
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private DrawerBuilder drawerBuilder;
     private Drawer drawer;
     private Toolbar toolbar;
     private ViewPager channelPager;
     private ChannelAdapter channelAdapter;
-    Gson gson;
+
+    public static final int ID_CHANNELS = 228;
+    public static final int ID_CATEGORIES = 332;
+    public static final int DELETE_CHANNELS = 666;
+    public static final int DELETE_CATEGORIES = 667;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +47,7 @@ public class MainActivity extends AppCompatActivity{
 
         buildDrawer();
 
-        channelPager = (ViewPager) findViewById(R.id.viewPager);
+     /*   channelPager = (ViewPager) findViewById(R.id.viewPager);
 
         channelAdapter = new ChannelAdapter(getSupportFragmentManager());
         ArrayList<ChannelFragment> channelFragments = new ArrayList<>();
@@ -44,9 +55,11 @@ public class MainActivity extends AppCompatActivity{
             channelFragments.add(ChannelFragment.newInstance(i, "tit;e " + i));
         }
         channelAdapter.setChannels(channelFragments);
-        channelPager.setAdapter(channelAdapter);
+        channelPager.setAdapter(channelAdapter);*/
 
         syncData();
+
+        getSupportLoaderManager().initLoader(ID_CHANNELS, null, this);
     }
 
     private void buildDrawer(){
@@ -70,10 +83,13 @@ public class MainActivity extends AppCompatActivity{
                             case 1:
                                 return false;
                             case 2:
+                                loadCategoriesFragment();
                                 return false;
                             case 3:
                                 return false;
                             case 4:
+                                loadScheduleFragment();
+                                return false;
                             default:
                                 return false;
                         }
@@ -82,8 +98,48 @@ public class MainActivity extends AppCompatActivity{
         drawer = drawerBuilder.build();
     }
 
+    private void loadScheduleFragment(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, ScheduleFragment.newInstance());
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    private void loadCategoriesFragment(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, CategoriesFragment.newInstance());
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
     private void syncData(){
         Intent i = new Intent(MainActivity.this, LoadService.class);
         startService(i);
+    }
+
+    private void clearDB(){
+        getSupportLoaderManager().restartLoader(DELETE_CATEGORIES, null, this);
+        getSupportLoaderManager().restartLoader(DELETE_CHANNELS, null, this);
+
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id){
+            case ID_CHANNELS:
+                return new CursorLoader(this, ChannelContract.ChannelEntry.CONTENT_URI, null, null, null, null);
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
