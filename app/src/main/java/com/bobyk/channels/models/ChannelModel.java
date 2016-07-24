@@ -12,6 +12,7 @@ public class ChannelModel implements Serializable{
     private String id;
     private String name;
     private String tvURL;
+    private String category;
 
     public ChannelModel(){
 
@@ -21,6 +22,7 @@ public class ChannelModel implements Serializable{
         setId(jsonObject.getString("id"));
         setName(jsonObject.getString("name"));
         setTvURL(jsonObject.getString("tvURL"));
+        setCategory(jsonObject.getString("category"));
     }
 
     public String getId() {
@@ -35,6 +37,10 @@ public class ChannelModel implements Serializable{
         return tvURL;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -47,11 +53,16 @@ public class ChannelModel implements Serializable{
         this.tvURL = tvURL;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Channel[ {id:" + this.id + "}, " +
                 "{name:" + this.name + "}, " +
-                "{tvURL:" + this.tvURL + "}\n";
+                "{tvURL:" + this.tvURL + "}, " +
+                "{category:" + this.category + "}\n";
 
     }
 }

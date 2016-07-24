@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewParent;
 
 import com.google.gson.Gson;
 import com.mikepenz.materialdrawer.Drawer;
@@ -32,34 +31,10 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("first");
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName("second");
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName("third");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawerBuilder = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .addDrawerItems(
-                        item1, item2, item3
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        switch (position){
-                            case 1:
-                                return true;
-                            case 2:
-                                return true;
-                            case 3:
-                                return true;
-                            default:
-                                return false;
-                        }
-                    }
-                });
-        drawer = drawerBuilder.build();
+        buildDrawer();
 
         channelPager = (ViewPager) findViewById(R.id.viewPager);
 
@@ -74,8 +49,41 @@ public class MainActivity extends AppCompatActivity{
         syncData();
     }
 
+    private void buildDrawer(){
+        PrimaryDrawerItem channels = new PrimaryDrawerItem().withIcon(R.drawable.tv_channel_icon).withIdentifier(1).withName("Channels");
+        PrimaryDrawerItem category = new PrimaryDrawerItem().withIcon(R.drawable.category_icon).withIdentifier(2).withName("Category");
+        PrimaryDrawerItem favorites = new PrimaryDrawerItem().withIcon(R.drawable.star_icon).withIdentifier(3).withName("Favorites");
+        PrimaryDrawerItem programSchedule = new PrimaryDrawerItem().withIcon(R.drawable.program_schedule_icon).withIdentifier(4).withName("Program Schedule");
+
+        drawerBuilder = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withActionBarDrawerToggle(true)
+                .withHeader(R.layout.drawer_header)
+                .addDrawerItems(
+                        channels, category, favorites, programSchedule
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        switch (position){
+                            case 1:
+                                return false;
+                            case 2:
+                                return false;
+                            case 3:
+                                return false;
+                            case 4:
+                            default:
+                                return false;
+                        }
+                    }
+                });
+        drawer = drawerBuilder.build();
+    }
+
     private void syncData(){
-        Intent i = new Intent(MainActivity.this, TryLoadService.class);
+        Intent i = new Intent(MainActivity.this, LoadService.class);
         startService(i);
     }
 }

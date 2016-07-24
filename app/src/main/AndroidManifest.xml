@@ -20,17 +20,12 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".LoadService"
-            android:enabled="true"
-            android:exported="true" />
-
         <provider
             android:name=".ChannelProvider"
             android:authorities="com.bobyk.channels" />
 
         <service
-            android:name=".TryLoadService"
+            android:name=".LoadService"
             android:exported="false"/>
     </application>
 

@@ -33,7 +33,8 @@ public class ChannelDBHelper extends SQLiteOpenHelper {
                         ChannelContract.ChannelEntry._ID + " INTEGER PRIMARY KEY, " +
                         ChannelContract.ChannelEntry.COLUMN_ID_NAME + " TEXT, " +
                         ChannelContract.ChannelEntry.COLUMN_NAME + " TEXT, " +
-                        ChannelContract.ChannelEntry.COLUMN_TV_URL + " TEXT);"
+                        ChannelContract.ChannelEntry.COLUMN_TV_URL + " TEXT, " +
+                        ChannelContract.ChannelEntry.COLUMN_CATEGORY + " TEXT);"
         );
     }
 }
