@@ -74,7 +74,7 @@ public class ChannelDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(
                 "CREATE TABLE " + ChannelContract.FavoriteEntry.TABLE_NAME + " (" +
                         ChannelContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY, " +
-                        ChannelContract.FavoriteEntry.COLUMN_FAVORITE + " TEXT);"
+                        ChannelContract.FavoriteEntry.COLUMN_ID_FAVORITE + " TEXT);"
         );
     }
 }

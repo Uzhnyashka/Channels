@@ -17,45 +17,48 @@ import com.bobyk.channels.ChannelDBHelper;
 import com.bobyk.channels.MainActivity;
 import com.bobyk.channels.R;
 import com.bobyk.channels.adapters.ChannelAdapter;
+import com.bobyk.channels.adapters.ScheduleAdapter;
 
 /**
  * Created by bobyk on 25/07/16.
  */
-public class ScheduleFragment  extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private static String category = null;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private ChannelAdapter channelAdapter;
-    private ChannelDBHelper channelDbHelper;
+public class ScheduleFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    public static ChannelsFragment newInstance(String ctgr) {
+    private static String channel;
+    private ChannelDBHelper channelDbHelper;
+    private ScheduleAdapter scheduleAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    public static ScheduleFragment newInstance(String chnl) {
+
         Bundle args = new Bundle();
-        category = ctgr;
-        ChannelsFragment fragment = new ChannelsFragment();
+        channel = chnl;
+        ScheduleFragment fragment = new ScheduleFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_channel, null);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeChannelContainer);
-        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         channelDbHelper = ChannelDBHelper.getInstance(getActivity());
-        channelAdapter = new ChannelAdapter(getActivity(), null, 0);
-        setListAdapter(channelAdapter);
+        scheduleAdapter = new ScheduleAdapter(getActivity(), null, 0);
+        setListAdapter(scheduleAdapter);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_schedule, null);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeScheduleContainer);
+        return view;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id){
-            case MainActivity.ID_CHANNELS:
-                if (category.equals("")) return new CursorLoader(getActivity(), ChannelContract.ChannelEntry.CONTENT_URI, null, null, null, null);
-                else return new CursorLoader(getActivity(), ChannelContract.ChannelEntry.CONTENT_URI, null, ChannelContract.ChannelEntry.COLUMN_CATEGORY + " = ?", new String[]{category}, null);
+            case MainActivity.ID_PROGRAMS:
+                if (channel.equals("")) return new CursorLoader(getActivity(), ChannelContract.ProgramEntry.CONTENT_URI, null, null, null, null);
+                else return new CursorLoader(getActivity(), ChannelContract.ProgramEntry.CONTENT_URI, null, ChannelContract.ProgramEntry.COLUMN_SHOW_ID + " = ?", new String[]{channel}, null);
             default:
                 return null;
         }
@@ -64,8 +67,8 @@ public class ScheduleFragment  extends ListFragment implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()){
-            case MainActivity.ID_CHANNELS:
-                channelAdapter.swapCursor(data);
+            case MainActivity.ID_PROGRAMS:
+                scheduleAdapter.swapCursor(data);
                 break;
             default:
                 break;
@@ -75,8 +78,8 @@ public class ScheduleFragment  extends ListFragment implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         switch (loader.getId()){
-            case MainActivity.ID_CHANNELS:
-                channelAdapter.swapCursor(null);
+            case MainActivity.ID_PROGRAMS:
+                scheduleAdapter.swapCursor(null);
                 break;
             default:
                 break;
@@ -97,6 +100,6 @@ public class ScheduleFragment  extends ListFragment implements LoaderManager.Loa
         if (channelDbHelper == null){
             channelDbHelper = ChannelDBHelper.getInstance(getActivity());
         }
-        getLoaderManager().initLoader(MainActivity.ID_CHANNELS, null, this);
+        getLoaderManager().initLoader(MainActivity.ID_PROGRAMS, null, this);
     }
 }

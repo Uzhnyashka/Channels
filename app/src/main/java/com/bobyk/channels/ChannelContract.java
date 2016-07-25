@@ -65,7 +65,7 @@ public class ChannelContract {
                 CONTENT_URI + "/" + PATH_FAVORITE;
 
         public static final String TABLE_NAME = "favoriteTable";
-        public static final String COLUMN_FAVORITE = "favorite";
+        public static final String COLUMN_ID_FAVORITE = "favorite";
 
         public static Uri buildFavoriteUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);

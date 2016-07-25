@@ -118,7 +118,10 @@ public class LoadService extends IntentService {
             }
         JSONObject jsonCurrentDay = jsonObject.getJSONObject(currentDayKey);
         Iterator iterator = jsonCurrentDay.keys();
+        int kol = 0;
         while (iterator.hasNext()){
+            kol++;
+            if (kol == 100) break;
             String k = (String) iterator.next();
             JSONObject jsonChannel = jsonCurrentDay.getJSONObject(k);
             ProgramModel programModel = new ProgramModel();

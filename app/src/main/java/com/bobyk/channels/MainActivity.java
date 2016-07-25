@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private ChannelAdapter channelAdapter;
 
     public static final int ID_CHANNELS = 228;
-    public static final int ID_CATEGORIES = 332;
+    public static final int ID_CATEGORIES = 322;
+    public static final int ID_PROGRAMS = 488;
+    public static final int ID_FAVORITE = 577;
     public static final int DELETE_CHANNELS = 666;
     public static final int DELETE_CATEGORIES = 667;
 
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private void loadFavoritesFragment(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-       // ft.replace(R.id.fragment, FavoritesFragment.newInstance());
+        ft.replace(R.id.fragment, FavoritesFragment.newInstance());
         ft.addToBackStack(null);
         ft.commit();
     }

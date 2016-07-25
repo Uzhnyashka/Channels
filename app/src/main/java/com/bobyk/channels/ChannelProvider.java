@@ -287,4 +287,5 @@ public class ChannelProvider extends ContentProvider {
         }
         return rows;
     }
+
 }
