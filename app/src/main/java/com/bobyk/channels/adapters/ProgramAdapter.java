@@ -20,21 +20,22 @@ import com.bobyk.channels.ChannelContract;
 import com.bobyk.channels.R;
 import com.bobyk.channels.fragments.ChannelsFragment;
 import com.bobyk.channels.fragments.PageFragment;
+import com.bobyk.channels.fragments.ScheduleFragment;
 
 /**
  * Created by bobyk on 25/07/16.
  */
-public class SchedulePagerAdapter extends FragmentPagerAdapter {
+public class ProgramAdapter extends FragmentPagerAdapter {
 
     private Cursor cursor;
     private LayoutInflater layoutInflater;
 
-    public SchedulePagerAdapter(Context context, FragmentManager fm, Cursor cursor) {
+    public ProgramAdapter(Context context, FragmentManager fm, Cursor cursor) {
         super(fm);
         this.cursor = cursor;
     }
 
- /*   public SchedulePagerAdapter(Context context, Cursor cursor){
+ /*   public ProgramAdapter(Context context, Cursor cursor){
         super(context, cursor);
         this.cursor = cursor;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -66,7 +67,7 @@ public class SchedulePagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Log.d("bla", "Bla " + position);
-        return ChannelsFragment.newInstance("");
+        return ScheduleFragment.newInstance("");
     }
 
   /*  @Override

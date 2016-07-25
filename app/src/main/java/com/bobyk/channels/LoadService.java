@@ -7,6 +7,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.bobyk.channels.models.ChannelModel;
+import com.bobyk.channels.models.ProgramModel;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -15,6 +16,7 @@ import com.loopj.android.http.SyncHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -28,6 +30,7 @@ public class LoadService extends IntentService {
 
 
     public static final String URL_CHANNEL = "https://t2dev.firebaseio.com/CHANNEL.json";
+    public static final String URL_PROGRAM = "https://t2dev.firebaseio.com/PROGRAM.json";
 
     private final AsyncHttpClient aClient = new SyncHttpClient();
 
@@ -43,9 +46,10 @@ public class LoadService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent){
         loadChannels();
+        loadProgram(Calendar.getInstance().getTimeInMillis());
     }
 
-    public void loadChannels(){
+    private void loadChannels(){
         aClient.get(URL_CHANNEL, new RequestParams(), new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -54,6 +58,22 @@ public class LoadService extends IntentService {
                 try {
                     getChannelsFromJson(response);
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void loadProgram(final long time){
+        aClient.get(URL_PROGRAM, new RequestParams(), new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                Log.d("yeee", "DO THIS");
+             //   System.out.println(response);
+                try{
+                    getProgramFromJson(response, time);
+                }catch (JSONException e){
                     e.printStackTrace();
                 }
             }
@@ -76,6 +96,36 @@ public class LoadService extends IntentService {
         }
 
         saveCategoriesToDb(categories);
+    }
+
+    private void getProgramFromJson(JSONObject jsonObject, long time) throws JSONException{
+        Iterator it = jsonObject.keys();
+        String currentDayKey = "";
+        Calendar timeRequired = Calendar.getInstance();
+        timeRequired.setTimeInMillis(time);
+        while (it.hasNext()){
+            String key = (String) it.next();
+            JSONObject jsonDay = jsonObject.getJSONObject(key);
+            Iterator iterator = jsonDay.keys();
+            String k = (String) iterator.next();
+            JSONObject jsonChannel = jsonDay.getJSONObject(k);
+            long date = jsonChannel.getLong("date");
+            Calendar dateTime = Calendar.getInstance();
+            dateTime.setTimeInMillis(date);
+            if (timeRequired.get(Calendar.DATE) == dateTime.get(Calendar.DATE)) {
+                currentDayKey = key;
+                break;}
+            }
+        JSONObject jsonCurrentDay = jsonObject.getJSONObject(currentDayKey);
+        Iterator iterator = jsonCurrentDay.keys();
+        while (iterator.hasNext()){
+            String k = (String) iterator.next();
+            JSONObject jsonChannel = jsonCurrentDay.getJSONObject(k);
+            ProgramModel programModel = new ProgramModel();
+            programModel.loadFromJson(jsonChannel);
+            System.out.println(programModel);
+            saveProgramToDb(programModel);
+        }
     }
 
     private void saveCategoriesToDb(Set<String> categories){
@@ -106,4 +156,11 @@ public class LoadService extends IntentService {
         getContentResolver().insert(ChannelContract.ChannelEntry.CONTENT_URI, contentValues);
     }
 
+    private void saveProgramToDb(ProgramModel program){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ChannelContract.ProgramEntry.COLUMN_DATE, program.getDate());
+        contentValues.put(ChannelContract.ProgramEntry.COLUMN_SHOW_ID, program.getShowID());
+        contentValues.put(ChannelContract.ProgramEntry.COLUMN_TVSHOW_NAME, program.getTvShowName());
+        getContentResolver().insert(ChannelContract.ProgramEntry.CONTENT_URI, contentValues);
+    }
 }

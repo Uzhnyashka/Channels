@@ -13,15 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.bobyk.channels.fragments.ScheduleFragment;
+import com.bobyk.channels.fragments.ProgramFragment;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import com.bobyk.channels.fragments.*;
-
-import java.util.ArrayList;
 
 /**
  * Created by bobyk on 22/07/16.
@@ -102,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private void loadScheduleFragment(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment, ScheduleFragment.newInstance());
+        ft.replace(R.id.fragment, ProgramFragment.newInstance());
         ft.addToBackStack(null);
         ft.commit();
     }

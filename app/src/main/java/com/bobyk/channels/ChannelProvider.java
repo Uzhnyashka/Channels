@@ -19,6 +19,10 @@ public class ChannelProvider extends ContentProvider {
     private static final int CHANNEL_ID = 101;
     private static final int CATEGORY = 200;
     private static final int CATEGORY_ID = 201;
+    private static final int FAVORITE = 300;
+    private static final int FAVORITE_ID = 301;
+    private static final int PROGRAM = 400;
+    private static final int PROGRAM_ID = 401;
 
     private static final UriMatcher uriMatcher = buildUriMatcher();
     private ChannelDBHelper channelDBHelper;
@@ -42,6 +46,10 @@ public class ChannelProvider extends ContentProvider {
         matcher.addURI(content, ChannelContract.PATH_CHANNEL + "/#", CHANNEL_ID);
         matcher.addURI(content, ChannelContract.PATH_CATEGORY, CATEGORY);
         matcher.addURI(content, ChannelContract.PATH_CATEGORY + "/#", CATEGORY_ID);
+        matcher.addURI(content, ChannelContract.PATH_FAVORITE, FAVORITE);
+        matcher.addURI(content, ChannelContract.PATH_FAVORITE + "/#", FAVORITE_ID);
+        matcher.addURI(content, ChannelContract.PATH_PROGRAM, PROGRAM);
+        matcher.addURI(content, ChannelContract.PATH_PROGRAM + "/#", PROGRAM_ID);
 
         return matcher;
     }
@@ -99,6 +107,52 @@ public class ChannelProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
+            case FAVORITE:
+                cursor = database.query(
+                        ChannelContract.FavoriteEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case FAVORITE_ID:
+                _id = ContentUris.parseId(uri);
+                cursor = database.query(
+                        ChannelContract.FavoriteEntry.TABLE_NAME,
+                        projection,
+                        ChannelContract.FavoriteEntry._ID + " = ?",
+                        new String[]{String.valueOf(_id)},
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case PROGRAM:
+                cursor = database.query(
+                        ChannelContract.ProgramEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case PROGRAM_ID:
+                _id = ContentUris.parseId(uri);
+                cursor = database.query(
+                        ChannelContract.ProgramEntry.TABLE_NAME,
+                        projection,
+                        ChannelContract.ProgramEntry._ID + " = ?",
+                        new String[]{String.valueOf(_id)},
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -118,6 +172,14 @@ public class ChannelProvider extends ContentProvider {
                 return ChannelContract.CategoryEntry.CONTENT_TYPE;
             case CATEGORY_ID:
                 return ChannelContract.CategoryEntry.CONTENT_ITEM_TYPE;
+            case FAVORITE:
+                return ChannelContract.FavoriteEntry.CONTENT_TYPE;
+            case FAVORITE_ID:
+                return ChannelContract.FavoriteEntry.CONTENT_ITEM_TYPE;
+            case PROGRAM:
+                return ChannelContract.ProgramEntry.CONTENT_TYPE;
+            case PROGRAM_ID:
+                return ChannelContract.ProgramEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -149,6 +211,24 @@ public class ChannelProvider extends ContentProvider {
                     throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
                 }
                 break;
+            case FAVORITE:
+                _id = database.insert(ChannelContract.FavoriteEntry.TABLE_NAME, null, contentValues);
+                if (_id > 0){
+                    returnUri = ChannelContract.FavoriteEntry.buildFavoriteUri(_id);
+                }
+                else {
+                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                }
+                break;
+            case PROGRAM:
+                _id = database.insert(ChannelContract.ProgramEntry.TABLE_NAME, null, contentValues);
+                if (_id > 0){
+                    returnUri = ChannelContract.ProgramEntry.buildProgramUri(_id);
+                }
+                else {
+                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                }
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -167,6 +247,12 @@ public class ChannelProvider extends ContentProvider {
                 break;
             case CATEGORY:
                 rows = database.delete(ChannelContract.CategoryEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case FAVORITE:
+                rows = database.delete(ChannelContract.FavoriteEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case PROGRAM:
+                rows = database.delete(ChannelContract.ProgramEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -189,6 +275,12 @@ public class ChannelProvider extends ContentProvider {
                 break;
             case CATEGORY:
                 rows = database.update(ChannelContract.CategoryEntry.TABLE_NAME, contentValues, selection,selectionArgs);
+                break;
+            case FAVORITE:
+                rows = database.update(ChannelContract.FavoriteEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+                break;
+            case PROGRAM:
+                rows = database.update(ChannelContract.ProgramEntry.TABLE_NAME, contentValues, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

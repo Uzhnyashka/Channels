@@ -28,12 +28,16 @@ public class ChannelDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         addChannelTable(sqLiteDatabase);
         addCategoryTable(sqLiteDatabase);
+        addFavoriteTable(sqLiteDatabase);
+        addProgramTable(sqLiteDatabase);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ChannelContract.CategoryEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ChannelContract.ChannelEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ChannelContract.FavoriteEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ChannelContract.ProgramEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 
@@ -53,6 +57,24 @@ public class ChannelDBHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + ChannelContract.CategoryEntry.TABLE_NAME + " (" +
                         ChannelContract.CategoryEntry._ID + " INTEGER PRIMARY KEY, " +
                         ChannelContract.CategoryEntry.COLUMN_CATEGORY + " TEXT);"
+        );
+    }
+
+    private void addProgramTable(SQLiteDatabase sqLiteDatabase){
+        sqLiteDatabase.execSQL(
+                "CREATE TABLE " + ChannelContract.ProgramEntry.TABLE_NAME + " (" +
+                        ChannelContract.ProgramEntry._ID + " INTEGER PRIMARY KEY, " +
+                        ChannelContract.ProgramEntry.COLUMN_DATE + " BIGINT, " +
+                        ChannelContract.ProgramEntry.COLUMN_SHOW_ID + " TEXT, " +
+                        ChannelContract.ProgramEntry.COLUMN_TVSHOW_NAME + " TEXT);"
+        );
+    }
+
+    private void addFavoriteTable(SQLiteDatabase sqLiteDatabase){
+        sqLiteDatabase.execSQL(
+                "CREATE TABLE " + ChannelContract.FavoriteEntry.TABLE_NAME + " (" +
+                        ChannelContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY, " +
+                        ChannelContract.FavoriteEntry.COLUMN_FAVORITE + " TEXT);"
         );
     }
 }
