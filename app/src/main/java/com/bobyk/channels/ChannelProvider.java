@@ -32,10 +32,6 @@ public class ChannelProvider extends ContentProvider {
     public boolean onCreate() {
         channelDBHelper = new ChannelDBHelper(getContext());
         return true;
-        /*Context context = getContext();
-        channelDBHelper = new ChannelDBHelper(context);
-        database = channelDBHelper.getWritableDatabase();
-        return (database == null) ? false:true;*/
     }
 
     public static UriMatcher buildUriMatcher(){
@@ -277,11 +273,11 @@ public class ChannelProvider extends ContentProvider {
                 rows = database.update(ChannelContract.CategoryEntry.TABLE_NAME, contentValues, selection,selectionArgs);
                 break;
             case FAVORITE:
-                rows = database.update(ChannelContract.FavoriteEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+                rows = database.update(ChannelContract.ChannelEntry.TABLE_NAME, contentValues, selection, selectionArgs);
                 break;
             case PROGRAM:
-                rows = database.update(ChannelContract.ProgramEntry.TABLE_NAME, contentValues, selection, selectionArgs);
-                break;
+                rows = database.update(ChannelContract.ChannelEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
