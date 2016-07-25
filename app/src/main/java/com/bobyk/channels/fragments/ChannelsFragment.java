@@ -39,7 +39,7 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channel, null);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeChannelContainer  );
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeChannelContainer);
         return view;
     }
 

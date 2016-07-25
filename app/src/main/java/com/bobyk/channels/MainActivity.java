@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                                 loadCategoriesFragment();
                                 return false;
                             case 3:
+                                loadFavoritesFragment();
                                 return false;
                             case 4:
                                 loadScheduleFragment();
@@ -116,6 +117,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void loadChannelsFragment(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment, ChannelsFragment.newInstance(""));
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    private void loadFavoritesFragment(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+       // ft.replace(R.id.fragment, FavoritesFragment.newInstance());
         ft.addToBackStack(null);
         ft.commit();
     }
