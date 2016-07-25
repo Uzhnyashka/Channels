@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bobyk.channels.ChannelContract;
 import com.bobyk.channels.R;
+import com.bobyk.channels.fragments.ChannelsFragment;
 import com.bobyk.channels.fragments.PageFragment;
 
 /**
@@ -65,7 +66,7 @@ public class SchedulePagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Log.d("bla", "Bla " + position);
-        return PageFragment.newInstance(position);
+        return ChannelsFragment.newInstance("");
     }
 
   /*  @Override
