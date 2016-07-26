@@ -5,11 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <TextView
-        android:id="@+id/tvPage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge">
-    </TextView>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:textSize="30dp"
+        android:id="@+id/tvLoading"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+    <ProgressBar
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    style="?android:attr/progressBarStyleInverse"
+        android:id="@+id/progressBar"
+        android:layout_below="@+id/tvLoading"
+        android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

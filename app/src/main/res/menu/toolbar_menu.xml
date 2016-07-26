@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/action_favorite"
-        android:icon="@drawable/update"
+        android:icon="@drawable/sync"
         android:title="@string/action_update"
         app:showAsAction="ifRoom"/>
 </menu>

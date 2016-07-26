@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.bobyk.channels.dbUtils.ChannelContract;
 import com.bobyk.channels.dbUtils.ChannelDBHelper;
@@ -22,7 +23,7 @@ import com.bobyk.channels.adapters.FavoriteAdapter;
  */
 public class FavoritesFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout linearLayout;
     private ChannelDBHelper channelDBHelper;
     private FavoriteAdapter favoriteAdapter;
 
@@ -36,7 +37,7 @@ public class FavoritesFragment extends ListFragment implements LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorite, null);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeFavoriteContainer);
+        linearLayout = (LinearLayout) view.findViewById(R.id.favoriteContainer);
         return view;
     }
 

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bobyk.channels.R;
@@ -13,19 +14,16 @@ import com.bobyk.channels.R;
 import java.util.Random;
 
 /**
- * Created by bobyk on 25/07/16.
+ * Created by bobyk on 26/07/16.
  */
 public class PageFragment extends Fragment {
-
-    static final String ARGUMENT_PAGE_NUMBER = "arg_page_number";
 
     int pageNumber;
     int backColor;
 
-    public static PageFragment newInstance(int page) {
+    public static PageFragment newInstance() {
         PageFragment pageFragment = new PageFragment();
         Bundle arguments = new Bundle();
-        arguments.putInt(ARGUMENT_PAGE_NUMBER, page);
         pageFragment.setArguments(arguments);
         return pageFragment;
     }
@@ -33,7 +31,6 @@ public class PageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageNumber = getArguments().getInt(ARGUMENT_PAGE_NUMBER);
 
         Random rnd = new Random();
         backColor = Color.argb(40, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
@@ -44,9 +41,9 @@ public class PageFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment, null);
 
-        TextView tvPage = (TextView) view.findViewById(R.id.tvPage);
-        tvPage.setText("Page " + pageNumber);
-        tvPage.setBackgroundColor(backColor);
+        ProgressBar pb = (ProgressBar) view.findViewById(R.id.progressBar);
+        pb.setVisibility(View.VISIBLE);
+        view.setBackgroundColor(backColor);
 
         return view;
     }

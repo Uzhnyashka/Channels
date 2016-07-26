@@ -70,7 +70,6 @@ public class LoadService extends IntentService {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                Log.d("yeee", "DO THIS");
                 try{
                     getProgramFromJson(response, Calendar.getInstance().getTimeInMillis());
                 }catch (JSONException e){
@@ -134,7 +133,6 @@ public class LoadService extends IntentService {
             }
         JSONObject jsonCurrentDay = jsonObject.getJSONObject(currentDayKey);
         Iterator iterator = jsonCurrentDay.keys();
-        int kol = 0;
         while (iterator.hasNext()){
             String k = (String) iterator.next();
             JSONObject jsonChannel = jsonCurrentDay.getJSONObject(k);

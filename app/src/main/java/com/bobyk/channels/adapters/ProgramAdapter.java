@@ -8,7 +8,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 
+import com.bobyk.channels.MainActivity;
 import com.bobyk.channels.dbUtils.ChannelContract;
+import com.bobyk.channels.fragments.PageFragment;
 import com.bobyk.channels.fragments.ScheduleFragment;
 
 /**
@@ -55,10 +57,11 @@ public class ProgramAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        cursor.moveToPosition(position);
-        Log.d("bla", "Bla " + position);
-        Log.d("bla", "Id_name: " + cursor.getString(cursor.getColumnIndex(ChannelContract.ChannelEntry.COLUMN_ID_NAME)));
-        return ScheduleFragment.newInstance(cursor.getString(cursor.getColumnIndex(ChannelContract.ChannelEntry.COLUMN_ID_NAME)));
+       /* if (!MainActivity.doneLoadSchedule) return PageFragment.newInstance(position);
+        else {*/
+            cursor.moveToPosition(position);
+            return ScheduleFragment.newInstance(cursor.getString(cursor.getColumnIndex(ChannelContract.ChannelEntry.COLUMN_ID_NAME)));
+        //}
        // return PageFragment.newInstance(position);
     }
 

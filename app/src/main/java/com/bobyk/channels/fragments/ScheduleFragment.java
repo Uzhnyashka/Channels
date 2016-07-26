@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.bobyk.channels.dbUtils.ChannelContract;
 import com.bobyk.channels.dbUtils.ChannelDBHelper;
@@ -29,7 +30,7 @@ public class ScheduleFragment extends ListFragment implements LoaderManager.Load
     private static String channel;
     private ChannelDBHelper channelDbHelper;
     private ScheduleAdapter scheduleAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout linearLayout;
     private int backColor;
 
     public static ScheduleFragment newInstance(String chnl) {
@@ -61,8 +62,8 @@ public class ScheduleFragment extends ListFragment implements LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule, null);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeScheduleContainer);
-        swipeRefreshLayout.setBackgroundColor(backColor);
+        linearLayout = (LinearLayout) view.findViewById(R.id.scheduleContainer);
+        linearLayout.setBackgroundColor(backColor);
         return view;
     }
 

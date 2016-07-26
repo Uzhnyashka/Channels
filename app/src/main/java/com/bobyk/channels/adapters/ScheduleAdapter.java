@@ -46,7 +46,11 @@ public class ScheduleAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
         if (viewHolder != null){
             viewHolder.tvProgramName.setText(programName);
-            viewHolder.tvProgramTime.setText(time.get(Calendar.HOUR_OF_DAY) + ":" + time.get(Calendar.MINUTE));
+            String h = String.valueOf(time.get(Calendar.HOUR_OF_DAY));
+            String m = String.valueOf(time.get(Calendar.MINUTE));
+            if (time.get(Calendar.HOUR_OF_DAY) < 10) h = "0" + h;
+            if (time.get(Calendar.MINUTE) < 10) m = "0" + m;
+            viewHolder.tvProgramTime.setText(h + ":" + m);
             viewHolder.programID = id;
         }
     }

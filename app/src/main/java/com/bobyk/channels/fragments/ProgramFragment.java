@@ -40,7 +40,7 @@ public class ProgramFragment extends Fragment implements LoaderManager.LoaderCal
 
             @Override
             public void onPageSelected(int position) {
-                Log.d("bla","Page " + position);
+
             }
 
             @Override

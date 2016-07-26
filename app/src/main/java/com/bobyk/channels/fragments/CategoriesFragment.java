@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bobyk.channels.dbUtils.ChannelContract;
@@ -25,7 +26,7 @@ import com.bobyk.channels.adapters.CategoryAdapter;
  */
 public class CategoriesFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    private SwipeRefreshLayout swipeContainer;
+    private LinearLayout linearContainer;
     private CategoryAdapter categoryAdapter;
     private ChannelDBHelper channelDbHelper;
 
@@ -52,7 +53,7 @@ public class CategoriesFragment extends ListFragment implements LoaderManager.Lo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, null);
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeCategoryContainer);
+        linearContainer = (LinearLayout) view.findViewById(R.id.categoryContainer);
         return view;
     }
 

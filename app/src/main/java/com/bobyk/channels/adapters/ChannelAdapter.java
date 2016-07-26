@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bobyk.channels.dbUtils.ChannelContract;
@@ -15,14 +16,11 @@ import com.bobyk.channels.R;
  * Created by bobyk on 24/07/16.
  */
 public class ChannelAdapter extends CursorAdapter{
-    LayoutInflater layoutInflater;
-    Context context;
-    Cursor cursor;
+    private LayoutInflater layoutInflater;
+
 
     public ChannelAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
-        this.context = context;
-        cursor = c;
         layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -34,6 +32,7 @@ public class ChannelAdapter extends CursorAdapter{
         TextView tvTvURL = (TextView) view.findViewById(R.id.channel_tvURL);
         viewHolder.tvChannelName = tvChannelName;
         viewHolder.tvTvURL = tvTvURL;
+        viewHolder.view = view;
         view.setTag(viewHolder);
         return view;
     }
@@ -54,6 +53,7 @@ public class ChannelAdapter extends CursorAdapter{
     public static class ViewHolder{
         public TextView tvChannelName;
         public TextView tvTvURL;
+        public View view;
         public long channelID;
     }
 }

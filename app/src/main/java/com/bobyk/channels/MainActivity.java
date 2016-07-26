@@ -10,6 +10,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private DrawerBuilder drawerBuilder;
     private Drawer drawer;
     private Toolbar toolbar;
+    private int currentPage = 0;
 
     public static final int ID_CHANNELS = 228;
     public static final int ID_CATEGORIES = 322;
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final int DELETE_CATEGORIES = 667;
     public static boolean doneLoadSchedule = false;
 
-  /*  @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
@@ -48,13 +51,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_favorite:
-                syncData();
+                if (doneLoadSchedule) syncData();
+                else Toast.makeText(getApplication(), "Loading is already in progress", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
-    }*/
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,17 +92,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch (position){
                             case 1:
+                                currentPage = 1;
                                 loadChannelsFragment();
                                 return false;
                             case 2:
+                                currentPage = 2;
                                 loadCategoriesFragment();
                                 return false;
                             case 3:
+                                currentPage = 3;
                                 loadFavoritesFragment();
                                 return false;
                             case 4:
-                                if (doneLoadSchedule) loadScheduleFragment();
-                                else Toast.makeText(getApplicationContext(),"Loading...", Toast.LENGTH_SHORT).show();
+                                currentPage = 4;
+                                if (!MainActivity.doneLoadSchedule) loadLoadingFragment();
+                                else loadScheduleFragment();
                                 return false;
                             default:
                                 return false;
@@ -136,11 +144,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ft.commit();
     }
 
+    private void loadLoadingFragment(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, PageFragment.newInstance());
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
     private void syncData(){
+        if (currentPage == 4){
+            loadLoadingFragment();
+        }
         doneLoadSchedule = false;
         clearDB();
         Intent i = new Intent(MainActivity.this, LoadService.class);
         startService(i);
+        loadChannelsFragment();
     }
 
     private void clearDB(){

@@ -1,6 +1,7 @@
 package com.bobyk.channels.fragments;
 
 import android.content.ContentValues;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -14,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bobyk.channels.adapters.ChannelAdapter;
@@ -23,13 +26,15 @@ import com.bobyk.channels.MainActivity;
 import com.bobyk.channels.R;
 import com.bobyk.channels.models.ChannelModel;
 
+import java.util.Random;
+
 /**
  * Created by bobyk on 24/07/16.
  */
 public class ChannelsFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static String category = null;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout linearLayout;
     private ChannelAdapter channelAdapter;
     private ChannelDBHelper channelDbHelper;
 
@@ -44,7 +49,7 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channel, null);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeChannelContainer);
+        linearLayout = (LinearLayout) view.findViewById(R.id.swipeChannelContainer);
         return view;
     }
 
@@ -73,9 +78,17 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
                         else deleteFromFavorites(channelModel, id);
                       //  Toast.makeText(getActivity(), holder.channelID + " : " + id, Toast.LENGTH_SHORT).show();
                     }
+                  /*  System.out.println("COLORRR");
+                    View v = holder.view;
+                    int backColor;
+                    Random rnd = new Random();
+                    if (!ok) backColor = Color.argb(40, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                    else backColor = Color.argb(0,  0, 0, 0);
+                    v.setBackgroundColor(backColor);*/
                 } else {
                     return true;
                 }
+
                 return true;
             }
         });
