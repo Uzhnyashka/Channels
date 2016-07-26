@@ -11,7 +11,10 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bobyk.channels.fragments.ProgramFragment;
 import com.mikepenz.materialdrawer.Drawer;
@@ -28,8 +31,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private DrawerBuilder drawerBuilder;
     private Drawer drawer;
     private Toolbar toolbar;
-    private ViewPager channelPager;
-    private ChannelAdapter channelAdapter;
 
     public static final int ID_CHANNELS = 228;
     public static final int ID_CATEGORIES = 322;
@@ -37,6 +38,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final int ID_FAVORITE = 577;
     public static final int DELETE_CHANNELS = 666;
     public static final int DELETE_CATEGORIES = 667;
+    public static boolean doneLoadSchedule = false;
+
+  /*  @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_favorite:
+                syncData();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }*/
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,17 +66,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setSupportActionBar(toolbar);
 
         buildDrawer();
-
-     /*   channelPager = (ViewPager) findViewById(R.id.viewPager);
-
-        channelAdapter = new ChannelAdapter(getSupportFragmentManager());
-        ArrayList<ChannelFragment> channelFragments = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            channelFragments.add(ChannelFragment.newInstance(i, "tit;e " + i));
-        }
-        channelAdapter.setChannels(channelFragments);
-        channelPager.setAdapter(channelAdapter);*/
-
         syncData();
 
         getSupportLoaderManager().initLoader(ID_CHANNELS, null, this);
@@ -90,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                                 loadFavoritesFragment();
                                 return false;
                             case 4:
-                                loadScheduleFragment();
+                                if (doneLoadSchedule) loadScheduleFragment();
+                                else Toast.makeText(getApplicationContext(),"Loading...", Toast.LENGTH_SHORT).show();
                                 return false;
                             default:
                                 return false;
@@ -129,13 +139,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void syncData(){
+        doneLoadSchedule = false;
+        clearDB();
         Intent i = new Intent(MainActivity.this, LoadService.class);
         startService(i);
     }
 
     private void clearDB(){
-        getSupportLoaderManager().restartLoader(DELETE_CATEGORIES, null, this);
-        getSupportLoaderManager().restartLoader(DELETE_CHANNELS, null, this);
+        getContentResolver().delete(ChannelContract.ChannelEntry.CONTENT_URI, null, null);
+        getContentResolver().delete(ChannelContract.CategoryEntry.CONTENT_URI, null, null);
+        getContentResolver().delete(ChannelContract.ProgramEntry.CONTENT_URI, null, null);
 
     }
 

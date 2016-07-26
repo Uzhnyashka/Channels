@@ -1,6 +1,7 @@
 package com.bobyk.channels.fragments;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -19,6 +20,8 @@ import com.bobyk.channels.R;
 import com.bobyk.channels.adapters.ChannelAdapter;
 import com.bobyk.channels.adapters.ScheduleAdapter;
 
+import java.util.Random;
+
 /**
  * Created by bobyk on 25/07/16.
  */
@@ -28,6 +31,7 @@ public class ScheduleFragment extends ListFragment implements LoaderManager.Load
     private ChannelDBHelper channelDbHelper;
     private ScheduleAdapter scheduleAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private int backColor;
 
     public static ScheduleFragment newInstance(String chnl) {
 
@@ -36,6 +40,15 @@ public class ScheduleFragment extends ListFragment implements LoaderManager.Load
         ScheduleFragment fragment = new ScheduleFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Random rnd = new Random();
+        backColor = Color.argb(40, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
     }
 
     @Override
@@ -50,6 +63,7 @@ public class ScheduleFragment extends ListFragment implements LoaderManager.Load
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule, null);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeScheduleContainer);
+        swipeRefreshLayout.setBackgroundColor(backColor);
         return view;
     }
 

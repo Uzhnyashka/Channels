@@ -13,6 +13,7 @@ public class ChannelModel implements Serializable{
     private String name;
     private String tvURL;
     private String category;
+    private boolean favorite;
 
     public ChannelModel(){
 
@@ -23,6 +24,7 @@ public class ChannelModel implements Serializable{
         setName(jsonObject.getString("name"));
         setTvURL(jsonObject.getString("tvURL"));
         setCategory(jsonObject.getString("category"));
+        setFavorite(jsonObject.getBoolean("favorite"));
     }
 
     public String getId() {
@@ -41,6 +43,14 @@ public class ChannelModel implements Serializable{
         return category;
     }
 
+    public boolean getFavorite(){
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -57,12 +67,14 @@ public class ChannelModel implements Serializable{
         this.category = category;
     }
 
+
     @Override
     public String toString() {
         return "Channel[ {id:" + this.id + "}, " +
                 "{name:" + this.name + "}, " +
                 "{tvURL:" + this.tvURL + "}, " +
-                "{category:" + this.category + "}\n";
+                "{category:" + this.category + "}, " +
+                "{favorite:" + this.favorite + "}\n";
 
     }
 }

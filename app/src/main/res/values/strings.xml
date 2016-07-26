@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Channels</string>
+    <string name="action_update">Update</string>
 </resources>

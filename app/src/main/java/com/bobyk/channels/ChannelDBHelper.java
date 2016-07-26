@@ -48,7 +48,8 @@ public class ChannelDBHelper extends SQLiteOpenHelper {
                         ChannelContract.ChannelEntry.COLUMN_ID_NAME + " TEXT, " +
                         ChannelContract.ChannelEntry.COLUMN_NAME + " TEXT, " +
                         ChannelContract.ChannelEntry.COLUMN_TV_URL + " TEXT, " +
-                        ChannelContract.ChannelEntry.COLUMN_CATEGORY + " TEXT);"
+                        ChannelContract.ChannelEntry.COLUMN_CATEGORY + " TEXT, " +
+                        ChannelContract.ChannelEntry.COLUMN_FAVORITE + " BOOLEAN);"
         );
     }
 

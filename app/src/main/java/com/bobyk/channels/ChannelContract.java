@@ -31,6 +31,7 @@ public class ChannelContract {
         public static final String COLUMN_NAME = "channelName";
         public static final String COLUMN_TV_URL = "tvURL";
         public static final String COLUMN_CATEGORY = "category";
+        public static final String COLUMN_FAVORITE = "favorite";
 
         public static Uri buildChannelUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);

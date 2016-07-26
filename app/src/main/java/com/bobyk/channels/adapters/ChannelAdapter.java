@@ -25,10 +25,12 @@ import org.w3c.dom.Text;
 public class ChannelAdapter extends CursorAdapter{
     LayoutInflater layoutInflater;
     Context context;
+    Cursor cursor;
 
     public ChannelAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
         this.context = context;
+        cursor = c;
         layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -38,10 +40,8 @@ public class ChannelAdapter extends CursorAdapter{
         ViewHolder viewHolder = new ViewHolder();
         TextView tvChannelName = (TextView) view.findViewById(R.id.channel_name);
         TextView tvTvURL = (TextView) view.findViewById(R.id.channel_tvURL);
-        Button btnFavorite = (Button) view.findViewById(R.id.btnFavorite);
         viewHolder.tvChannelName = tvChannelName;
         viewHolder.tvTvURL = tvTvURL;
-        viewHolder.btnFavorite = btnFavorite;
         view.setTag(viewHolder);
         return view;
     }
@@ -55,30 +55,13 @@ public class ChannelAdapter extends CursorAdapter{
         if (viewHolder != null){
             viewHolder.tvChannelName.setText(channelName);
             viewHolder.tvTvURL.setText(channelTvURL);
-            viewHolder.btnFavorite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ChannelModel channelModel = new ChannelModel();
-                    channelModel.setId(cursor.getString(cursor.getColumnIndex(ChannelContract.ChannelEntry.COLUMN_ID_NAME)));
-                    saveFavoritesToDb(channelModel);
-                }
-            });
             viewHolder.channelID = id;
         }
     }
 
-    public void saveFavoritesToDb(ChannelModel channel){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(ChannelContract.FavoriteEntry.COLUMN_ID_FAVORITE, channel.getId());
-        Toast.makeText(context, channel.getId(), Toast.LENGTH_SHORT).show();
-        context.getContentResolver().insert(ChannelContract.FavoriteEntry.CONTENT_URI, contentValues);
-    }
-
-
     public static class ViewHolder{
         public TextView tvChannelName;
         public TextView tvTvURL;
-        public Button btnFavorite;
         public long channelID;
     }
 }

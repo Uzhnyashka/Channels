@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.impl.execchain.MainClientExec;
 
 public class LoadService extends IntentService {
 
@@ -47,6 +48,7 @@ public class LoadService extends IntentService {
     protected void onHandleIntent(Intent intent){
         loadChannels();
         loadProgram(Calendar.getInstance().getTimeInMillis());
+        MainActivity.doneLoadSchedule = true;
     }
 
     private void loadChannels(){
@@ -70,7 +72,6 @@ public class LoadService extends IntentService {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 Log.d("yeee", "DO THIS");
-             //   System.out.println(response);
                 try{
                     getProgramFromJson(response, time);
                 }catch (JSONException e){
@@ -88,6 +89,7 @@ public class LoadService extends IntentService {
             System.out.println(key);
             JSONObject jsonChannel = jsonObject.getJSONObject(key);
             jsonChannel.put("category", getCategory(jsonChannel));
+            jsonChannel.put("favorite", false);
             categories.add(jsonChannel.getString("category"));
             ChannelModel channel = new ChannelModel();
             channel.loadFromJson(jsonChannel);
@@ -156,6 +158,7 @@ public class LoadService extends IntentService {
         contentValues.put(ChannelContract.ChannelEntry.COLUMN_NAME, channel.getName());
         contentValues.put(ChannelContract.ChannelEntry.COLUMN_TV_URL, channel.getTvURL());
         contentValues.put(ChannelContract.ChannelEntry.COLUMN_CATEGORY, channel.getCategory());
+        contentValues.put(ChannelContract.ChannelEntry.COLUMN_FAVORITE, channel.getFavorite());
         getContentResolver().insert(ChannelContract.ChannelEntry.CONTENT_URI, contentValues);
     }
 
