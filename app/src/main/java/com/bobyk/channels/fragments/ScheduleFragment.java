@@ -69,35 +69,18 @@ public class ScheduleFragment extends ListFragment implements LoaderManager.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id){
-            case MainActivity.ID_PROGRAMS:
-                if (channel.equals("")) return new CursorLoader(getActivity(), ChannelContract.ProgramEntry.CONTENT_URI, null, null, null, null);
-                else return new CursorLoader(getActivity(), ChannelContract.ProgramEntry.CONTENT_URI, null, ChannelContract.ProgramEntry.COLUMN_SHOW_ID + " = ?", new String[]{channel}, null);
-            default:
-                return null;
-        }
+         if (channel.equals("")) return new CursorLoader(getActivity(), ChannelContract.ProgramEntry.CONTENT_URI, null, null, null, null);
+         else return new CursorLoader(getActivity(), ChannelContract.ProgramEntry.CONTENT_URI, null, ChannelContract.ProgramEntry.COLUMN_SHOW_ID + " = ?", new String[]{channel}, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()){
-            case MainActivity.ID_PROGRAMS:
-                scheduleAdapter.swapCursor(data);
-                break;
-            default:
-                break;
-        }
+        scheduleAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        switch (loader.getId()){
-            case MainActivity.ID_PROGRAMS:
-                scheduleAdapter.swapCursor(null);
-                break;
-            default:
-                break;
-        }
+        scheduleAdapter.swapCursor(null);
     }
 
     @Override

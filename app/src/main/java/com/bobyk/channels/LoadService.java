@@ -148,8 +148,6 @@ public class LoadService extends IntentService {
             values[count] = contentValues;
             count++;
 
-
-            System.out.println(programModel);
         }
         saveProgramValuesToDb(values);
     }

@@ -18,7 +18,6 @@ import java.util.Random;
  */
 public class PageFragment extends Fragment {
 
-    int pageNumber;
     int backColor;
 
     public static PageFragment newInstance() {

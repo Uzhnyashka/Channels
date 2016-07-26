@@ -73,34 +73,17 @@ public class CategoriesFragment extends ListFragment implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id){
-            case MainActivity.ID_CATEGORIES:
-                return new CursorLoader(getActivity(), ChannelContract.CategoryEntry.CONTENT_URI, null, null, null, null);
-            default:
-                return null;
-        }
+        return new CursorLoader(getActivity(), ChannelContract.CategoryEntry.CONTENT_URI, null, null, null, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()){
-            case MainActivity.ID_CATEGORIES:
-                categoryAdapter.swapCursor(data);
-                break;
-            default:
-                break;
-        }
+         categoryAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        switch (loader.getId()){
-            case MainActivity.ID_CATEGORIES:
-                categoryAdapter.swapCursor(null);
-                break;
-            default:
-                break;
-        }
+        categoryAdapter.swapCursor(null);
     }
 
     @Override

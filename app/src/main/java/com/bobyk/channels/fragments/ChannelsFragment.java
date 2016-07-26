@@ -76,15 +76,7 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
                         boolean ok = cursor.getInt(cursor.getColumnIndex(ChannelContract.ChannelEntry.COLUMN_FAVORITE)) > 0;
                         if (!ok) saveFavoritesToDb(channelModel, id);
                         else deleteFromFavorites(channelModel, id);
-                      //  Toast.makeText(getActivity(), holder.channelID + " : " + id, Toast.LENGTH_SHORT).show();
                     }
-                  /*  System.out.println("COLORRR");
-                    View v = holder.view;
-                    int backColor;
-                    Random rnd = new Random();
-                    if (!ok) backColor = Color.argb(40, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-                    else backColor = Color.argb(0,  0, 0, 0);
-                    v.setBackgroundColor(backColor);*/
                 } else {
                     return true;
                 }
@@ -106,7 +98,7 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
         getActivity().getContentResolver().update(ChannelContract.ChannelEntry.CONTENT_URI, contentUpdateValues,
                 ChannelContract.ChannelEntry._ID + " = ?", new String[]{String.valueOf(id)});
 
-        Toast.makeText(getActivity(), "Add " + id, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Added to Favorites", Toast.LENGTH_SHORT).show();
     }
 
     public void deleteFromFavorites(ChannelModel channel, long id){
@@ -117,40 +109,23 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
         getActivity().getContentResolver().update(ChannelContract.ChannelEntry.CONTENT_URI, contentUpdateValues,
                 ChannelContract.ChannelEntry._ID + " = ?", new String[]{String.valueOf(id)});
 
-        Toast.makeText(getActivity(), "delete " + id, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Deleted from Favorites", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id){
-            case MainActivity.ID_CHANNELS:
-                if (category.equals("")) return new CursorLoader(getActivity(), ChannelContract.ChannelEntry.CONTENT_URI, null, null, null, null);
-                else return new CursorLoader(getActivity(), ChannelContract.ChannelEntry.CONTENT_URI, null, ChannelContract.ChannelEntry.COLUMN_CATEGORY + " = ?", new String[]{category}, null);
-            default:
-                return null;
-        }
+        if (category.equals("")) return new CursorLoader(getActivity(), ChannelContract.ChannelEntry.CONTENT_URI, null, null, null, null);
+        else return new CursorLoader(getActivity(), ChannelContract.ChannelEntry.CONTENT_URI, null, ChannelContract.ChannelEntry.COLUMN_CATEGORY + " = ?", new String[]{category}, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()){
-            case MainActivity.ID_CHANNELS:
-                channelAdapter.swapCursor(data);
-                break;
-            default:
-                break;
-        }
+          channelAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        switch (loader.getId()){
-            case MainActivity.ID_CHANNELS:
-                channelAdapter.swapCursor(null);
-                break;
-            default:
-                break;
-        }
+        channelAdapter.swapCursor(null);
     }
 
     @Override

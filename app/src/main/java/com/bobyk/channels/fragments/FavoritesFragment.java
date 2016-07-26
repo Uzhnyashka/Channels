@@ -52,28 +52,17 @@ public class FavoritesFragment extends ListFragment implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id){
-            case MainActivity.ID_FAVORITE:
-                return new CursorLoader(getActivity(), ChannelContract.FavoriteEntry.CONTENT_URI, null, null, null, null);
-            default:
-                return null;
-        }
+        return new CursorLoader(getActivity(), ChannelContract.FavoriteEntry.CONTENT_URI, null, null, null, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        switch (loader.getId()){
-            case MainActivity.ID_FAVORITE:
-                favoriteAdapter.swapCursor(data);
-        }
+        favoriteAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        switch (loader.getId()){
-            case MainActivity.ID_FAVORITE:
-                favoriteAdapter.swapCursor(null);
-        }
+        favoriteAdapter.swapCursor(null);
     }
 
     @Override
