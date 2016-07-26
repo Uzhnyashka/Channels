@@ -35,10 +35,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static final int ID_CHANNELS = 228;
     public static final int ID_CATEGORIES = 322;
-    public static final int ID_PROGRAMS = 488;
-    public static final int ID_FAVORITE = 577;
-    public static final int DELETE_CHANNELS = 666;
-    public static final int DELETE_CATEGORIES = 667;
+    public static final int ID_PROGRAMS = 1337;
+    public static final int ID_FAVORITE = 1488;
     public static boolean doneLoadSchedule = false;
 
     @Override
