@@ -105,15 +105,16 @@ public class LoadService extends IntentService {
             values[k] = contentValues;
             k++;
             //--------------------------------------
-
-          //  saveChannelToDb(channel);
         }
 
-        saveAllToDb(values);
+        saveChannelValuesToDb(values);
         saveCategoriesToDb(categories);
     }
 
     private void getProgramFromJson(JSONObject jsonObject, long time) throws JSONException{
+        ContentValues[] values = new ContentValues[1000000];
+        int count = 0;
+
         Iterator it = jsonObject.keys();
         String currentDayKey = "";
         Calendar timeRequired = Calendar.getInstance();
@@ -135,15 +136,24 @@ public class LoadService extends IntentService {
         Iterator iterator = jsonCurrentDay.keys();
         int kol = 0;
         while (iterator.hasNext()){
-            kol++;
-            if (kol == 100) break;
             String k = (String) iterator.next();
             JSONObject jsonChannel = jsonCurrentDay.getJSONObject(k);
             ProgramModel programModel = new ProgramModel();
             programModel.loadFromJson(jsonChannel);
+
+            //---------------------------------------------
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ChannelContract.ProgramEntry.COLUMN_DATE, programModel.getDate());
+            contentValues.put(ChannelContract.ProgramEntry.COLUMN_SHOW_ID, programModel.getShowID());
+            contentValues.put(ChannelContract.ProgramEntry.COLUMN_TVSHOW_NAME, programModel.getTvShowName());
+            //--------------------------------------------------------------------------------
+            values[count] = contentValues;
+            count++;
+
+
             System.out.println(programModel);
-            saveProgramToDb(programModel);
         }
+        saveProgramValuesToDb(values);
     }
 
     private void saveCategoriesToDb(Set<String> categories){
@@ -165,26 +175,12 @@ public class LoadService extends IntentService {
         return null;
     }
 
-    private void saveChannelToDb(ChannelModel channel){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(ChannelContract.ChannelEntry.COLUMN_ID_NAME, channel.getId());
-        contentValues.put(ChannelContract.ChannelEntry.COLUMN_NAME, channel.getName());
-        contentValues.put(ChannelContract.ChannelEntry.COLUMN_TV_URL, channel.getTvURL());
-        contentValues.put(ChannelContract.ChannelEntry.COLUMN_CATEGORY, channel.getCategory());
-        contentValues.put(ChannelContract.ChannelEntry.COLUMN_FAVORITE, channel.getFavorite());
-        getContentResolver().insert(ChannelContract.ChannelEntry.CONTENT_URI, contentValues);
-    }
-
-    private void saveProgramToDb(ProgramModel program){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(ChannelContract.ProgramEntry.COLUMN_DATE, program.getDate());
-        contentValues.put(ChannelContract.ProgramEntry.COLUMN_SHOW_ID, program.getShowID());
-        contentValues.put(ChannelContract.ProgramEntry.COLUMN_TVSHOW_NAME, program.getTvShowName());
-        getContentResolver().insert(ChannelContract.ProgramEntry.CONTENT_URI, contentValues);
-    }
-
-    private void saveAllToDb(ContentValues[] values){
+    private void saveChannelValuesToDb(ContentValues[] values){
         System.out.println(values[0]);
         getContentResolver().bulkInsert(ChannelContract.ChannelEntry.CONTENT_URI, values);
+    }
+
+    private void saveProgramValuesToDb(ContentValues[] values){
+        getContentResolver().bulkInsert(ChannelContract.ProgramEntry.CONTENT_URI, values);
     }
 }

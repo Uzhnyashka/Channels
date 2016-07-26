@@ -303,6 +303,9 @@ public class ChannelProvider extends ContentProvider {
             case CHANNEL:
                 table = ChannelContract.ChannelEntry.TABLE_NAME;
                 break;
+            case PROGRAM:
+                table = ChannelContract.ProgramEntry.TABLE_NAME;
+                break;
         }
 
         System.out.println(table);
