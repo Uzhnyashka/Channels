@@ -1,4 +1,4 @@
-package com.bobyk.channels;
+package com.bobyk.channels.dbUtils;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -75,7 +75,9 @@ public class ChannelDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(
                 "CREATE TABLE " + ChannelContract.FavoriteEntry.TABLE_NAME + " (" +
                         ChannelContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY, " +
-                        ChannelContract.FavoriteEntry.COLUMN_ID_FAVORITE + " TEXT);"
+                        ChannelContract.FavoriteEntry.COLUMN_FAVORITE_ID + " TEXT, " +
+                        ChannelContract.FavoriteEntry.COLUMN_FAVORITE_NAME + " TEXT, " +
+                        ChannelContract.FavoriteEntry.COLUMN_FAVORITE_URL + " TEXT);"
         );
     }
 }

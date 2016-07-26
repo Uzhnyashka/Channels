@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import com.bobyk.channels.ChannelContract;
+import com.bobyk.channels.dbUtils.ChannelContract;
 import com.bobyk.channels.R;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by bobyk on 26/07/16.
@@ -30,8 +28,8 @@ public class FavoriteAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
         View view = layoutInflater.inflate(R.layout.favorite_item, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder();
-        TextView tvFavoriteIdName = (TextView) view.findViewById(R.id.favorite_id_name);
-        viewHolder.tvFavoriteIdName = tvFavoriteIdName;
+        viewHolder.tvFavoriteName = (TextView) view.findViewById(R.id.favorite_id_name);;
+        viewHolder.tvFavoriteURL =  (TextView) view.findViewById(R.id.favorite_url);
         view.setTag(viewHolder);
         return view;
     }
@@ -39,16 +37,19 @@ public class FavoriteAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         long id = cursor.getLong(cursor.getColumnIndex("_id"));
-        String favoriteIdName = cursor.getString(cursor.getColumnIndex(ChannelContract.FavoriteEntry.COLUMN_ID_FAVORITE));
+        String favoriteName = cursor.getString(cursor.getColumnIndex(ChannelContract.FavoriteEntry.COLUMN_FAVORITE_NAME));
+        String favoriteURL = cursor.getString(cursor.getColumnIndex(ChannelContract.FavoriteEntry.COLUMN_FAVORITE_URL));
         ViewHolder viewHolder = (ViewHolder) view.getTag();
         if (viewHolder != null){
-            viewHolder.tvFavoriteIdName.setText(favoriteIdName);
+            viewHolder.tvFavoriteName.setText(favoriteName);
+            viewHolder.tvFavoriteURL.setText(favoriteURL);
             viewHolder.favoriteID = id;
         }
     }
 
     public static class ViewHolder{
-        public TextView tvFavoriteIdName;
+        public TextView tvFavoriteName;
+        public TextView tvFavoriteURL;
         public long favoriteID;
     }
 }

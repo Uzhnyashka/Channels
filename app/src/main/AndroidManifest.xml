@@ -22,7 +22,7 @@
         </activity>
 
         <provider
-            android:name=".ChannelProvider"
+            android:name=".dbUtils.ChannelProvider"
             android:authorities="com.bobyk.channels" />
 
         <service

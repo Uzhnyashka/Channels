@@ -1,4 +1,4 @@
-package com.bobyk.channels;
+package com.bobyk.channels.dbUtils;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -30,8 +31,12 @@ public class ChannelProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        channelDBHelper = new ChannelDBHelper(getContext());
-        return true;
+      /*  channelDBHelper = new ChannelDBHelper(getContext());
+        return true;*/
+        Context context = getContext();
+        channelDBHelper = new ChannelDBHelper(context);
+        database = channelDBHelper.getWritableDatabase();
+        return (database == null) ? false:true;
     }
 
     public static UriMatcher buildUriMatcher(){
@@ -288,4 +293,35 @@ public class ChannelProvider extends ContentProvider {
         return rows;
     }
 
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        int numInserted = 0;
+        String table = "";
+
+        int uriType = uriMatcher.match(uri);
+        switch (uriType){
+            case CHANNEL:
+                table = ChannelContract.ChannelEntry.TABLE_NAME;
+                break;
+        }
+
+        System.out.println(table);
+        SQLiteDatabase sqlDB = channelDBHelper.getWritableDatabase();
+        sqlDB.beginTransaction();
+        try{
+            for (ContentValues cv : values){
+                if (cv == null) break;
+                long newID = sqlDB.insertOrThrow(table, null, cv);
+                if (newID <= 0){
+                    throw new SQLException("Failed to insert row into " + uri);
+                }
+            }
+            sqlDB.setTransactionSuccessful();
+            getContext().getContentResolver().notifyChange(uri, null);
+            numInserted = values.length;
+        }finally {
+            sqlDB.endTransaction();
+        }
+        return numInserted;
+    }
 }

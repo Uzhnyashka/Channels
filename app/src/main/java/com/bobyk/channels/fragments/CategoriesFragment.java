@@ -12,11 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.bobyk.channels.ChannelContract;
-import com.bobyk.channels.ChannelDBHelper;
+import com.bobyk.channels.dbUtils.ChannelContract;
+import com.bobyk.channels.dbUtils.ChannelDBHelper;
 import com.bobyk.channels.MainActivity;
 import com.bobyk.channels.R;
 import com.bobyk.channels.adapters.CategoryAdapter;

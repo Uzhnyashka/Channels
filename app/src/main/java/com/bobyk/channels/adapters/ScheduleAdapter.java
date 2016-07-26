@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import com.bobyk.channels.ChannelContract;
+import com.bobyk.channels.dbUtils.ChannelContract;
 import com.bobyk.channels.R;
 
 import java.util.Calendar;

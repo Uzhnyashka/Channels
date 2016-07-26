@@ -1,4 +1,4 @@
-package com.bobyk.channels;
+package com.bobyk.channels.dbUtils;
 
 import android.content.ContentUris;
 import android.net.Uri;
@@ -66,7 +66,9 @@ public class ChannelContract {
                 CONTENT_URI + "/" + PATH_FAVORITE;
 
         public static final String TABLE_NAME = "favoriteTable";
-        public static final String COLUMN_ID_FAVORITE = "favorite";
+        public static final String COLUMN_FAVORITE_ID = "favoriteId";
+        public static final String COLUMN_FAVORITE_NAME = "favoriteName";
+        public static final String COLUMN_FAVORITE_URL = "favoriteURL";
 
         public static Uri buildFavoriteUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);

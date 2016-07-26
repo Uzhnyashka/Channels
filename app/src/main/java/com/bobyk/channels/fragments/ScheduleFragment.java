@@ -13,11 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bobyk.channels.ChannelContract;
-import com.bobyk.channels.ChannelDBHelper;
+import com.bobyk.channels.dbUtils.ChannelContract;
+import com.bobyk.channels.dbUtils.ChannelDBHelper;
 import com.bobyk.channels.MainActivity;
 import com.bobyk.channels.R;
-import com.bobyk.channels.adapters.ChannelAdapter;
 import com.bobyk.channels.adapters.ScheduleAdapter;
 
 import java.util.Random;

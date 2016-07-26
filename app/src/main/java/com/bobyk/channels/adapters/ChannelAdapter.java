@@ -1,23 +1,15 @@
 package com.bobyk.channels.adapters;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bobyk.channels.ChannelContract;
+import com.bobyk.channels.dbUtils.ChannelContract;
 import com.bobyk.channels.R;
-import com.bobyk.channels.models.ChannelModel;
-import com.bobyk.channels.models.ProgramModel;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by bobyk on 24/07/16.

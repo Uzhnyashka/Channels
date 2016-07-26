@@ -3,9 +3,9 @@ package com.bobyk.channels;
 import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.Context;
 import android.util.Log;
 
+import com.bobyk.channels.dbUtils.ChannelContract;
 import com.bobyk.channels.models.ChannelModel;
 import com.bobyk.channels.models.ProgramModel;
 import com.loopj.android.http.AsyncHttpClient;
@@ -20,10 +20,8 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.impl.execchain.MainClientExec;
 
 public class LoadService extends IntentService {
 
@@ -47,7 +45,7 @@ public class LoadService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent){
         loadChannels();
-        loadProgram(Calendar.getInstance().getTimeInMillis());
+        loadProgram();
         MainActivity.doneLoadSchedule = true;
     }
 
@@ -64,16 +62,17 @@ public class LoadService extends IntentService {
                 }
             }
         });
+
     }
 
-    private void loadProgram(final long time){
+    private void loadProgram(){
         aClient.get(URL_PROGRAM, new RequestParams(), new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 Log.d("yeee", "DO THIS");
                 try{
-                    getProgramFromJson(response, time);
+                    getProgramFromJson(response, Calendar.getInstance().getTimeInMillis());
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
@@ -82,21 +81,35 @@ public class LoadService extends IntentService {
     }
 
     private void getChannelsFromJson(JSONObject jsonObject) throws JSONException {
+        ContentValues[] values = new ContentValues[1000000];
         Set<String> categories = new HashSet<String>();
         Iterator it = jsonObject.keys();
+        int k = 0;
         while (it.hasNext()){
             String key = (String) it.next();
-            System.out.println(key);
             JSONObject jsonChannel = jsonObject.getJSONObject(key);
             jsonChannel.put("category", getCategory(jsonChannel));
             jsonChannel.put("favorite", false);
             categories.add(jsonChannel.getString("category"));
             ChannelModel channel = new ChannelModel();
             channel.loadFromJson(jsonChannel);
-            saveChannelToDb(channel);
-            System.out.println(channel);
+
+
+            //-------------------------------------
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ChannelContract.ChannelEntry.COLUMN_ID_NAME, channel.getId());
+            contentValues.put(ChannelContract.ChannelEntry.COLUMN_NAME, channel.getName());
+            contentValues.put(ChannelContract.ChannelEntry.COLUMN_TV_URL, channel.getTvURL());
+            contentValues.put(ChannelContract.ChannelEntry.COLUMN_CATEGORY, channel.getCategory());
+            contentValues.put(ChannelContract.ChannelEntry.COLUMN_FAVORITE, channel.getFavorite());
+            values[k] = contentValues;
+            k++;
+            //--------------------------------------
+
+          //  saveChannelToDb(channel);
         }
 
+        saveAllToDb(values);
         saveCategoriesToDb(categories);
     }
 
@@ -168,5 +181,10 @@ public class LoadService extends IntentService {
         contentValues.put(ChannelContract.ProgramEntry.COLUMN_SHOW_ID, program.getShowID());
         contentValues.put(ChannelContract.ProgramEntry.COLUMN_TVSHOW_NAME, program.getTvShowName());
         getContentResolver().insert(ChannelContract.ProgramEntry.CONTENT_URI, contentValues);
+    }
+
+    private void saveAllToDb(ContentValues[] values){
+        System.out.println(values[0]);
+        getContentResolver().bulkInsert(ChannelContract.ChannelEntry.CONTENT_URI, values);
     }
 }

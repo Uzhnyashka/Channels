@@ -1,6 +1,5 @@
 package com.bobyk.channels.fragments;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -18,8 +17,8 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.bobyk.channels.adapters.ChannelAdapter;
-import com.bobyk.channels.ChannelContract;
-import com.bobyk.channels.ChannelDBHelper;
+import com.bobyk.channels.dbUtils.ChannelContract;
+import com.bobyk.channels.dbUtils.ChannelDBHelper;
 import com.bobyk.channels.MainActivity;
 import com.bobyk.channels.R;
 import com.bobyk.channels.models.ChannelModel;
@@ -67,6 +66,8 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
                         long id = cursor.getLong(cursor.getColumnIndex(ChannelContract.ChannelEntry._ID));
                         ChannelModel channelModel = new ChannelModel();
                         channelModel.setId(cursor.getString(cursor.getColumnIndex(ChannelContract.ChannelEntry.COLUMN_ID_NAME)));
+                        channelModel.setName(cursor.getString(cursor.getColumnIndex(ChannelContract.ChannelEntry.COLUMN_NAME)));
+                        channelModel.setTvURL(cursor.getString(cursor.getColumnIndex(ChannelContract.ChannelEntry.COLUMN_TV_URL)));
                         boolean ok = cursor.getInt(cursor.getColumnIndex(ChannelContract.ChannelEntry.COLUMN_FAVORITE)) > 0;
                         if (!ok) saveFavoritesToDb(channelModel, id);
                         else deleteFromFavorites(channelModel, id);
@@ -82,7 +83,9 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
 
     public void saveFavoritesToDb(ChannelModel channel, long id){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ChannelContract.FavoriteEntry.COLUMN_ID_FAVORITE, channel.getId());
+        contentValues.put(ChannelContract.FavoriteEntry.COLUMN_FAVORITE_ID, channel.getId());
+        contentValues.put(ChannelContract.FavoriteEntry.COLUMN_FAVORITE_NAME, channel.getName());
+        contentValues.put(ChannelContract.FavoriteEntry.COLUMN_FAVORITE_URL, channel.getTvURL());
         getActivity().getContentResolver().insert(ChannelContract.FavoriteEntry.CONTENT_URI, contentValues);
 
         ContentValues contentUpdateValues = new ContentValues();
@@ -94,7 +97,7 @@ public class ChannelsFragment extends ListFragment implements LoaderManager.Load
     }
 
     public void deleteFromFavorites(ChannelModel channel, long id){
-        getActivity().getContentResolver().delete(ChannelContract.FavoriteEntry.CONTENT_URI, ChannelContract.FavoriteEntry.COLUMN_ID_FAVORITE + " = ?", new String[]{channel.getId()});
+        getActivity().getContentResolver().delete(ChannelContract.FavoriteEntry.CONTENT_URI, ChannelContract.FavoriteEntry.COLUMN_FAVORITE_ID + " = ?", new String[]{channel.getId()});
 
         ContentValues contentUpdateValues = new ContentValues();
         contentUpdateValues.put(ChannelContract.ChannelEntry.COLUMN_FAVORITE, false);
